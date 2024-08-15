@@ -1,54 +1,73 @@
-![Static Badge](https://img.shields.io/badge/Envoy_proxy-pink?style=plastic&logoSize=auto) ![Static Badge](https://img.shields.io/badge/Docker-blue?style=plastic&logo=docker&logoSize=auto) ![Static Badge](https://img.shields.io/badge/Ruby-red?style=plastic&logo=ruby&logoSize=auto)
-
 # Envoy External Authorization
 
-## Build
+![Envoy Proxy](https://img.shields.io/badge/envoy_proxy-magenta?style=social&logo=envoyproxy&logoSize=auto) ![Docker](https://img.shields.io/badge/docker-blue?style=social&logo=docker&logoSize=auto) ![Ruby](https://img.shields.io/badge/ruby-red?style=social&logo=ruby&logoSize=auto)
 
-```bash
-docker-compose build
-```
+This repository demonstrates how to use [Envoy proxy](https://www.envoyproxy.io/) with an external authorization service.
 
-## Run
+## Install, build and run
 
-```bash
-docker-compose up
-```
+To install the project, follow these steps:
 
-## Test
+1. Clone the repository:
 
-Current setup allows only requests with `User-Agent: Chrome` header, with other `User-Agent` headers the request will be rejected with `403` status code.
+    ```bash
+    git clone https://github.com/ferencsarai/envoy-auth
+    ```
 
-**Not allowed** (403):
+2. Change into the project directory:
 
-```bash
-curl -v -A "sfjs" http://localhost:8000
-```
+    ```bash
+    cd envoy-auth
+    ```
 
-**Allowed** (200) we will get the response from the echo service [http-echo](https://hub.docker.com/r/solsson/http-echo):
+3. Build the project using Docker Compose:
 
-```bash
-curl -v -A "Chrome" http://localhost:8000
-```
+    ```bash
+    docker-compose build
+    ```
+
+4. To run the project, use the following command:
+
+    ```bash
+    docker-compose up
+    ```
+
+## Usage
+
+Once the project is running, you can send requests to `http://localhost:8000` with the `User-Agent: Chrome` header to get a successful response. Requests with any other `User-Agent` header will result in a `403` status code.
+
+- **Not allowed (403)**:
+
+    ```bash
+    curl -v -A "sfjs" http://localhost:8000
+    ```
+
+- **Allowed (200)** - this will return a response from the echo service [http-echo](https://hub.docker.com/r/solsson/http-echo):
+
+    ```bash
+    curl -v -A "Chrome" http://localhost:8000
+    ```
 
 ## How it works
 
 ![Envoy External Authorization](./assets/envoy_proxy.png)
 
-Uses three containers:
+The project utilizes three containers from the docker-compose [file](docker-compose.yaml).
 
 1. [Envoy proxy](Dockerfile-proxy)
 2. [External authorization service](Dockerfile-auth-service)
+    2.1. [Ruby script](./auth-service.rb)
 3. [Service (http-echo)](Dockerfile-web-echo)
 
-Requests flow:
+## Request flow
 
-1. The client sends a request to the Envoy proxy.
-2. The Envoy proxy forwards the request to the external authorization service.
-3. The external authorization service checks the `User-Agent` header and returns `200` if the header contains the `Chrome` string.
-4. The Envoy proxy forwards the request to the service if the external authorization service returns `200`.
-5. The service returns the response to the client.
-If the external authorization service returns a different status code (e.g., `403`), the Envoy proxy returns the status code to the client without forwarding the request to the service.
+1. The client sends a request to Envoy proxy.
+2. Envoy proxy forwards the request to the external authorization service.
+3. The external authorization service checks the `User-Agent` header.
+    3.1. If the `User-Agent` contains `Chrome`, it returns `200`.
+    3.2. If the `User-Agent` does not contain `Chrome`, it returns `403`.
+4. Envoy proxy forwards the request to the service if `200` is returned. Otherwise, it returns `403` to the client without forwarding the request to the service.
 
 ## Configuration
 
-- Envoy proxy configuration: [envoy.yaml](./envoy.yaml)
+Envoy proxy configuration: [envoy.yaml](./envoy.yaml)
