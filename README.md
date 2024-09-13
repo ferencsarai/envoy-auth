@@ -64,8 +64,8 @@ The project utilizes three containers from the docker-compose [file](docker-comp
 1. The client sends a request to Envoy proxy.
 2. Envoy proxy forwards the request to the external authorization service.
 3. The external authorization service checks the `User-Agent` header.
-    3.1. If the `User-Agent` contains `Chrome`, it returns `200`.
-    3.2. If the `User-Agent` does not contain `Chrome`, it returns `403`.
+   - If the `User-Agent` contains `Chrome`, it returns `200`.
+   - If the `User-Agent` does not contain `Chrome`, it returns `403`.
 4. Envoy proxy forwards the request to the service if `200` is returned. Otherwise, it returns `403` to the client without forwarding the request to the service.
 
 ## Configuration
