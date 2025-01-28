@@ -55,9 +55,8 @@ Once the project is running, you can send requests to `http://localhost:8000` wi
 The project utilizes three containers from the docker-compose [file](docker-compose.yaml).
 
 1. [Envoy proxy](Dockerfile-proxy)
-2. [External authorization service](Dockerfile-auth-service)
-    2.1. [Ruby script](./auth-service.rb)
-3. [Service (http-echo)](Dockerfile-web-echo)
+2. [External authorization service](Dockerfile-auth-service) ([Ruby script](./auth-service.rb))
+4. [Service (http-echo)](Dockerfile-web-echo)
 
 ## Request flow
 
