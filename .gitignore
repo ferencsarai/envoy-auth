@@ -1,0 +1,34 @@
+# See https://github.com/github/gitignore/blob/main/Global/macOS.gitignore
+.DS_Store
+.env
+*.log
+*.tmp
+node_modules/
+.envrc
+coverage/
+__pycache__/
+*.pyc
+*.swp
+.idea/
+.vscode/
+# Docker
+**/tmp/
+**/cache/
+**/.env
+**/.env.*
+**/dist/
+**/build/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.tox/
+**/.coverage
+**/.eggs/
+**/eggs/
+**/.bundle/
+**/vendor/
+**/log/
+**/logs/
+**/test-results/
+**/test-output/
+**/tmp/
+**/tmp/**/*

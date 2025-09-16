@@ -3,10 +3,10 @@ services:
 
   proxy:
     build:
-      context: .
-      dockerfile: Dockerfile-proxy
+      context: ./docker/envoy-proxy
+      dockerfile: Dockerfile
     volumes:
-      - ./envoy.yaml:/etc/envoy.yaml
+      - ./docker/envoy-proxy/envoy.yaml:/etc/envoy.yaml
     networks:
       - envoymesh
     expose:
@@ -18,8 +18,8 @@ services:
 
   web_echo:
     build:
-      context: .
-      dockerfile: Dockerfile-web-echo
+      context: ./docker/web-echo
+      dockerfile: Dockerfile
     networks:
       envoymesh:
         aliases:
@@ -31,16 +31,10 @@ services:
 
   auth_srv:
     build:
-      context: .
-      dockerfile: Dockerfile-auth-service
+      context: ./docker/auth-service
+      dockerfile: Dockerfile
     networks:
-      envoymesh:
-        aliases:
-          - auth_srv
-    expose:
-      - "3000"
-    ports:
-      - "3000:3000"
+      - envoymesh
 
 
 networks:

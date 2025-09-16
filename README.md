@@ -1,5 +1,7 @@
+
 # Envoy External Authorization
 
+![CI](https://github.com/ferencsarai/envoy-auth/actions/workflows/ci.yml/badge.svg)
 ![Envoy Proxy](https://img.shields.io/badge/envoy_proxy-magenta?style=social&logo=envoyproxy&logoSize=auto) ![Docker](https://img.shields.io/badge/docker-blue?style=social&logo=docker&logoSize=auto) ![Ruby](https://img.shields.io/badge/ruby-red?style=social&logo=ruby&logoSize=auto)
 
 This repository demonstrates how to use [Envoy proxy](https://www.envoyproxy.io/) with an external authorization service.
@@ -54,9 +56,9 @@ Once the project is running, you can send requests to `http://localhost:8000` wi
 
 The project utilizes three containers from the docker-compose [file](docker-compose.yaml).
 
-1. [Envoy proxy](Dockerfile-proxy)
-2. [External authorization service](Dockerfile-auth-service) ([Ruby script](./auth-service.rb))
-4. [Service (http-echo)](Dockerfile-web-echo)
+1. [Envoy proxy](docker/envoy-proxy/Dockerfile) ([config](docker/envoy-proxy/envoy.yaml))
+2. [External authorization service](docker/auth-service/Dockerfile) ([Ruby script](docker/auth-service/auth-service.rb))
+3. [Service (http-echo)](docker/web-echo/Dockerfile)
 
 ## Request flow
 
@@ -69,4 +71,12 @@ The project utilizes three containers from the docker-compose [file](docker-comp
 
 ## Configuration
 
-Envoy proxy configuration: [envoy.yaml](./envoy.yaml)
+Envoy proxy configuration: [envoy.yaml](docker/envoy-proxy/envoy.yaml)
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines. Please also review our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [CODEOWNERS](CODEOWNERS).
+
+## License
+
+This project is licensed under the terms of the [MIT License](LICENSE).
