@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      docker:
+        image: docker:24.0.5-dind
+        options: --privileged
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and start services
+        run: |
+          docker-compose build
+          docker-compose up -d
+      - name: Wait for services to be ready
+        run: |
+          sleep 5
+      - name: Test forbidden User-Agent (should be 403)
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" -A "sfjs" http://localhost:8000)
+          if [ "$status" -ne 403 ]; then
+            echo "Expected 403 Forbidden, got $status" >&2
+            exit 1
+          fi
+      - name: Test allowed User-Agent (should be 200)
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" -A "Chrome" http://localhost:8000)
+          if [ "$status" -ne 200 ]; then
+            echo "Expected 200 OK, got $status" >&2
+            exit 1
+          fi
+      - name: Cleanup containers
+        if: always()
+        run: |
+          docker-compose down -v
