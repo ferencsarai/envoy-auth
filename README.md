@@ -1,7 +1,7 @@
 
 # Envoy External Authorization
 
-![CI](https://github.com/ferencsarai/envoy-auth/actions/workflows/ci.yml/badge.svg)
+[![CI](https://github.com/ferencsarai/envoy-auth/actions/workflows/ci.yml/badge.svg)](https://github.com/ferencsarai/envoy-auth/actions/workflows/ci.yml)
 ![Envoy Proxy](https://img.shields.io/badge/envoy_proxy-magenta?style=social&logo=envoyproxy&logoSize=auto) ![Docker](https://img.shields.io/badge/docker-blue?style=social&logo=docker&logoSize=auto) ![Ruby](https://img.shields.io/badge/ruby-red?style=social&logo=ruby&logoSize=auto)
 
 This repository demonstrates how to use [Envoy proxy](https://www.envoyproxy.io/) with an external authorization service.
