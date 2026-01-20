@@ -13,10 +13,13 @@ If a component version is changed, you MUST:
 3. Locate the component's CHANGELOG:
    - **Internal components**: Look for CHANGELOG.md in the repository.
    - **External dependencies** (Docker images, npm packages, etc.):
-     - For Docker Hub images (e.g., `envoyproxy/envoy`), check the GitHub repository for the project (e.g., `https://github.com/envoyproxy/envoy`).
-     - Look for CHANGELOG.md, CHANGES.md, or RELEASES.md in the upstream repository.
-     - Check GitHub Releases at `https://github.com/<owner>/<repo>/releases` for release notes.
-     - Use the fetch_webpage tool to retrieve changelog information from external sources.
+     - For Docker Hub images (e.g., `envoyproxy/envoy`), the GitHub repository typically has the same path (e.g., `https://github.com/envoyproxy/envoy`).
+     - **ALWAYS use the fetch_webpage tool** to retrieve changelog information from external sources.
+     - Try these sources in order:
+       1. GitHub Releases page: `https://github.com/<owner>/<repo>/releases/tag/<version>` (e.g., `https://github.com/envoyproxy/envoy/releases/tag/v1.37.0`)
+       2. If the specific release page doesn't exist, try the general releases page: `https://github.com/<owner>/<repo>/releases`
+       3. CHANGELOG file in the repo: `https://raw.githubusercontent.com/<owner>/<repo>/main/CHANGELOG.md` or `/master/CHANGELOG.md`
+     - Extract relevant information from the fetched pages for the version range.
 4. Collect CHANGELOG entries between the old version (exclusive) and the new version (inclusive).
 5. Add a comment directly to the pull request summarizing the changes.
 
@@ -36,12 +39,13 @@ Changelog highlights:
 
 ## Rules
 
+- **CRITICAL**: For external dependencies, you MUST use the fetch_webpage tool to retrieve changelog information before concluding that no entries were found.
 - Only summarize information explicitly found in the CHANGELOG or release notes.
 - Do NOT invent or guess changes.
 - Keep the summary concise (maximum 3–6 bullet points).
 - Do NOT paste the full CHANGELOG.
-- For external dependencies, always attempt to fetch the changelog from the upstream source before giving up.
-- If no relevant CHANGELOG entries are found after checking all sources, post this text instead:
+- For external dependencies, fetch from multiple sources (release pages, changelog files) if the first attempt doesn't yield results.
+- If no relevant CHANGELOG entries are found after checking all sources with fetch_webpage, post this text instead:
 
 No CHANGELOG entries were found for this version range.
 
