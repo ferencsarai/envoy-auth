@@ -10,42 +10,50 @@ If a component version is changed, you MUST:
 
 1. Identify the component name.
 2. Identify the previous version and the new version.
-3. Locate the component's CHANGELOG:
-   - **Internal components**: Look for CHANGELOG.md in the repository.
-   - **External dependencies** (Docker images, npm packages, etc.):
-     - For Docker Hub images (e.g., `envoyproxy/envoy`), the GitHub repository typically has the same path (e.g., `https://github.com/envoyproxy/envoy`).
-     - **ALWAYS use the fetch_webpage tool** to retrieve changelog information from external sources.
-     - Try these sources in order:
-       1. GitHub Releases page: `https://github.com/<owner>/<repo>/releases/tag/<version>` (e.g., `https://github.com/envoyproxy/envoy/releases/tag/v1.37.0`)
-       2. If the specific release page doesn't exist, try the general releases page: `https://github.com/<owner>/<repo>/releases`
-       3. CHANGELOG file in the repo: `https://raw.githubusercontent.com/<owner>/<repo>/main/CHANGELOG.md` or `/master/CHANGELOG.md`
-     - Extract relevant information from the fetched pages for the version range.
-4. Collect CHANGELOG entries between the old version (exclusive) and the new version (inclusive).
-5. Add a comment directly to the pull request summarizing the changes.
+3. For **internal components**, look for CHANGELOG.md in the repository and collect relevant entries.
+4. For **external dependencies** (Docker images, npm packages, etc.), provide helpful information:
+   - Identify the likely upstream repository (e.g., `envoyproxy/envoy` Docker image → `https://github.com/envoyproxy/envoy`)
+   - Provide links to where changelog information can be found:
+     - GitHub Releases: `https://github.com/<owner>/<repo>/releases/tag/<version>`
+     - General releases page: `https://github.com/<owner>/<repo>/releases`
+   - Suggest reviewers check these sources for breaking changes or important updates
+5. Add a comment directly to the pull request with the summary or helpful links.
 
 ## PR comment format
 
-Use the following structure when posting the PR comment:
+For **internal components** where CHANGELOG is available, use:
 
-Title: Component update summary
+**Component update summary**
 
-Component: <component-name>  
-Version: <old-version> → <new-version>
+Component: `<component-name>`  
+Version: `<old-version>` → `<new-version>`
 
 Changelog highlights:
 - <short summary item 1>
 - <short summary item 2>
 - <short summary item 3>
 
+For **external dependencies**, use:
+
+**Dependency update detected**
+
+Component: `<component-name>`  
+Version: `<old-version>` → `<new-version>`
+
+⚠️ Please review the upstream changelog:
+- [Release notes for <new-version>](https://github.com/<owner>/<repo>/releases/tag/<new-version>)
+- [All releases](https://github.com/<owner>/<repo>/releases)
+
+Reviewers should check for breaking changes or important updates.
+
 ## Rules
 
-- **CRITICAL**: For external dependencies, you MUST use the fetch_webpage tool to retrieve changelog information before concluding that no entries were found.
-- Only summarize information explicitly found in the CHANGELOG or release notes.
+- For internal components, only summarize information explicitly found in the CHANGELOG.
+- For external dependencies, provide clickable links to upstream release pages rather than attempting to fetch or guess changes.
 - Do NOT invent or guess changes.
-- Keep the summary concise (maximum 3–6 bullet points).
+- Keep internal component summaries concise (maximum 3–6 bullet points).
 - Do NOT paste the full CHANGELOG.
-- For external dependencies, fetch from multiple sources (release pages, changelog files) if the first attempt doesn't yield results.
-- If no relevant CHANGELOG entries are found after checking all sources with fetch_webpage, post this text instead:
+- If an internal component has no relevant CHANGELOG entries, state:
 
 No CHANGELOG entries were found for this version range.
 
