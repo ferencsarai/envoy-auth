@@ -69,6 +69,39 @@ The project utilizes three containers from the docker-compose [file](docker-comp
    - If the `User-Agent` does not contain `Chrome`, it returns `403`.
 4. Envoy proxy forwards the request to the service if `200` is returned. Otherwise, it returns `403` to the client without forwarding the request to the service.
 
+### Allowed request (200)
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Envoy as Envoy Proxy<br/>(port 8000)
+    participant Auth as Auth Service<br/>(port 3000)
+    participant Echo as Echo Service<br/>(port 8080)
+
+    Client->>Envoy: GET / (User-Agent: Chrome)
+    Envoy->>Auth: forward User-Agent header
+    Auth-->>Envoy: 200 OK
+    Envoy->>Echo: forward original request
+    Echo-->>Envoy: 200 OK + echoed request
+    Envoy-->>Client: 200 OK + echoed request
+```
+
+### Denied request (403)
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Envoy as Envoy Proxy<br/>(port 8000)
+    participant Auth as Auth Service<br/>(port 3000)
+    participant Echo as Echo Service<br/>(port 8080)
+
+    Client->>Envoy: GET / (User-Agent: sfjs)
+    Envoy->>Auth: forward User-Agent header
+    Auth-->>Envoy: 403 Forbidden
+    Envoy-->>Client: 403 Forbidden
+    Note over Echo: never reached
+```
+
 ## Configuration
 
 Envoy proxy configuration: [envoy.yaml](docker/envoy-proxy/envoy.yaml)
