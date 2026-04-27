@@ -1,4 +1,3 @@
-
 # Envoy External Authorization
 
 [![CI](https://github.com/ferencsarai/envoy-auth/actions/workflows/ci.yml/badge.svg)](https://github.com/ferencsarai/envoy-auth/actions/workflows/ci.yml)
@@ -25,24 +24,18 @@ To install the project, follow these steps:
 3. Build the project using Docker Compose:
 
     ```bash
-    docker-compose build
+    docker compose build
     ```
 
 4. To run the project, use the following command:
 
     ```bash
-    docker-compose up
+    docker compose up
     ```
 
 ## Usage
 
 Once the project is running, you can send requests to `http://localhost:8000` with the `User-Agent: Chrome` header to get a successful response. Requests with any other `User-Agent` header will result in a `403` status code.
-
-- **Not allowed (403)**:
-
-    ```bash
-    curl -v -A "sfjs" http://localhost:8000
-    ```
 
 - **Allowed (200)** - this will return a response from the echo service [http-echo](https://hub.docker.com/r/solsson/http-echo):
 
@@ -50,24 +43,24 @@ Once the project is running, you can send requests to `http://localhost:8000` wi
     curl -v -A "Chrome" http://localhost:8000
     ```
 
+- **Not allowed (403)**:
+
+    ```bash
+    # any non-Chrome User-Agent
+    curl -v -A "sfjs" http://localhost:8000
+    ```
+
 ## How it works
 
 ![Envoy External Authorization](./assets/envoy_proxy.png)
 
-The project utilizes three containers from the docker-compose [file](docker-compose.yaml).
+The project utilizes three containers from the docker compose [file](docker-compose.yaml).
 
 1. [Envoy proxy](docker/envoy-proxy/Dockerfile) ([config](docker/envoy-proxy/envoy.yaml))
 2. [External authorization service](docker/auth-service/Dockerfile) ([Ruby script](docker/auth-service/auth-service.rb))
-3. [Service (http-echo)](docker/web-echo/Dockerfile)
+3. [Echo service (http-echo)](docker/web-echo/Dockerfile)
 
 ## Request flow
-
-1. The client sends a request to Envoy proxy.
-2. Envoy proxy forwards the request to the external authorization service.
-3. The external authorization service checks the `User-Agent` header.
-   - If the `User-Agent` contains `Chrome`, it returns `200`.
-   - If the `User-Agent` does not contain `Chrome`, it returns `403`.
-4. Envoy proxy forwards the request to the service if `200` is returned. Otherwise, it returns `403` to the client without forwarding the request to the service.
 
 ### Allowed request (200)
 
