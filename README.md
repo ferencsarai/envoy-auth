@@ -2,8 +2,10 @@
 
 [![CI](https://github.com/ferencsarai/envoy-auth/actions/workflows/ci.yml/badge.svg)](https://github.com/ferencsarai/envoy-auth/actions/workflows/ci.yml)
 ![Envoy Proxy](https://img.shields.io/badge/envoy_proxy-magenta?style=social&logo=envoyproxy&logoSize=auto) ![Docker](https://img.shields.io/badge/docker-blue?style=social&logo=docker&logoSize=auto) ![Ruby](https://img.shields.io/badge/ruby-red?style=social&logo=ruby&logoSize=auto)
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg)](LICENSE)
+![Last commit](https://img.shields.io/github/last-commit/ferencsarai/envoy-auth)
 
-This repository demonstrates how to use [Envoy proxy](https://www.envoyproxy.io/) with an external authorization service.
+A minimal, runnable reference for Envoy's [`ext_authz`](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/ext_authz_filter) filter: see external HTTP authorization decisions (allow/deny) enforced at the proxy in under 5 minutes, no code required — just Docker Compose.
 
 ## Install, build and run
 
